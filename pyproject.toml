@@ -1,0 +1,45 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatchling",
+  "awscli",
+]
+
+[project]
+name = "aws-razor"
+description = "Alternative CLI frontend for aws-cli completions"
+authors = [
+  { name = "Skyler Hawthorne", email = "skyler@dead10ck.dev" },
+]
+license = "MPL-2.0"
+readme = "README.md"
+classifiers = [
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Natural Language :: English",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+requires-python = ">=3.9"
+dynamic = ["version"]
+
+dependencies = [
+  "awscli"
+]
+
+[project.urls]
+homepage = "http://aws.amazon.com/cli/"
+
+[tool.uv.sources.awscli]
+git = "https://github.com/aws/aws-cli.git"
+branch = "v2"
+
+[tool.hatch.metadata.hooks.custom]
