@@ -2,7 +2,6 @@
 build-backend = "hatchling.build"
 requires = [
   "hatchling",
-  "awscli",
 ]
 
 [project]
@@ -17,7 +16,6 @@ classifiers = [
   "Intended Audience :: Developers",
   "Intended Audience :: System Administrators",
   "Natural Language :: English",
-  "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3",
@@ -31,12 +29,14 @@ classifiers = [
 requires-python = ">=3.9"
 dynamic = ["version"]
 
+scripts = { aws-razor = "aws_razor.main:main" }
+
 dependencies = [
-  "awscli"
+  "awscli>=2.25.4"
 ]
 
 [project.urls]
-homepage = "http://aws.amazon.com/cli/"
+homepage = "https://github.com/dead10ck/aws-razor"
 
 [tool.uv.sources.awscli]
 git = "https://github.com/aws/aws-cli.git"
