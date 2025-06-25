@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import os
@@ -24,6 +25,31 @@ LOGGER = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
+def get_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="aws-razor",
+        description="General purpose awscli command line completions. "
+        "The environment variables COMP_LINE and COMMAND_LINE are read "
+        "for the command line contents, but are superseded by the --text argument if given.",
+    )
+
+    parser.add_argument(
+        "--text",
+        "-t",
+        type=str,
+        help="The command to complete",
+    )
+
+    parser.add_argument(
+        "--position",
+        "-p",
+        type=int,
+        help="Position of the cursor in the given text",
+    )
+
+    return parser.parse_args()
+
+
 def get_completions(
     completer: Completer, doc: Document, event: CompleteEvent
 ) -> Generator[dict[str, Any], None, None]:
@@ -44,14 +70,22 @@ def get_completions(
 
 
 def main() -> None:
+    args = get_args()
+
     cli_driver = create_clidriver()
     completer = ThreadedCompleter(
         PromptToolkitCompleter(create_autocompleter(driver=cli_driver))
     )
 
     # bash exports COMP_LINE and COMP_POINT, tcsh COMMAND_LINE only
-    command_line = os.environ.get("COMP_LINE") or os.environ.get("COMMAND_LINE") or ""
-    command_index = int(os.environ.get("COMP_POINT") or len(command_line))
+    command_line = (
+        args.text or os.environ.get("COMP_LINE") or os.environ.get("COMMAND_LINE") or ""
+    )
+    command_index = (
+        args.position
+        or (os.environ.get("COMP_POINT") and int(os.environ["COMP_POINT"]))
+        or len(command_line)
+    )
 
     # the completer expects `aws` to be omitted
     if command_line.startswith("aws "):
