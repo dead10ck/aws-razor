@@ -1,7 +1,6 @@
 import argparse
 import json
 import logging
-import os
 from typing import (
     Any,
     Generator,
@@ -34,8 +33,9 @@ def get_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--text",
-        "-t",
+        "--command-line",
+        "-c",
+        required=True,
         type=str,
         help="The command to complete",
     )
@@ -77,26 +77,18 @@ def main() -> None:
         PromptToolkitCompleter(create_autocompleter(driver=cli_driver))
     )
 
-    # bash exports COMP_LINE and COMP_POINT, tcsh COMMAND_LINE only
-    command_line = (
-        args.text or os.environ.get("COMP_LINE") or os.environ.get("COMMAND_LINE") or ""
-    )
-    command_index = (
-        args.position
-        or (os.environ.get("COMP_POINT") and int(os.environ["COMP_POINT"]))
-        or len(command_line)
-    )
+    command_index = args.position or len(args.command_line)
 
     # the completer expects `aws` to be omitted
-    if command_line.startswith("aws "):
-        command_line = command_line[4:]
+    if args.command_line.startswith("aws "):
+        args.command_line = args.command_line[4:]
         command_index = max(0, command_index - 4)
 
-    doc = Document(command_line, command_index)
+    doc = Document(args.command_line, command_index)
     event = CompleteEvent(completion_requested=True)
 
     if LOGGER.isEnabledFor(logging.DEBUG):
-        LOGGER.debug(f"command_line: {command_line}")
+        LOGGER.debug(f"command_line: {args.command_line}")
 
     try:
         for comp in get_completions(completer, doc, event):
