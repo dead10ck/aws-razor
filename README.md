@@ -11,4 +11,21 @@ frontend.
 
 ## Usage
 
+For Nushell,
 
+```nushell
+def "nu-complete aws" [context: string, pos: int] {
+  aws-razor --command-line $context --position $pos
+  | from json --objects
+  | each {|completion|
+    {
+      value: $completion.text,
+      description: $completion.display_meta,
+    }
+  }
+}
+
+export extern "aws" [
+  ...command: string@"nu-complete aws"
+]
+```
