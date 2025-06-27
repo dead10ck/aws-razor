@@ -2,7 +2,13 @@
 
 *At last, my arm is complete again!*
 
-This tool is an alternative to awscli's built-in completion prompt. This tool
-uses the same auto completion machinery from the CLI's code, but simply writes
-the completion results as plain JSON objects (one per line) so that it can be
-used for any completion frontend, such as bash, fish, or nushell.
+This tool is an alternative to awscli's built-in completion prompt. It uses
+the same auto completion machinery from the CLI's code, but simply writes the
+completion results as plain JSON objects, one per line. It is primarily intended
+for completion frontends that accept more context than just the completion text,
+such as descriptions, e.g. nushell; although, it can be used for any completion
+frontend.
+
+## Usage
+
+
