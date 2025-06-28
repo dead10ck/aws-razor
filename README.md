@@ -29,3 +29,15 @@ export extern "aws" [
   ...command: string@"nu-complete aws"
 ]
 ```
+
+## Installation
+
+Note this requires `awscli` v2, which is not available on PyPI. This tool can
+be installed to either the system so that it uses the system's python path, or
+installed in a virtualenv together with the awscli from git. In the virtualenv,
+you can install awscli from the `v2` branch of the git repo along with this
+tool, e.g.
+
+```
+uv tool install aws-razor --with "git+https://github.com/aws/aws-cli.git@v2"
+```
